@@ -1,14 +1,26 @@
 import mongoose from "mongoose";
-
-const userModel = new mongoose.Schema({
+import bcrypt from "bcryptjs";
+const userModel = new mongoose.Schema(
+  {
     name: { type: String, required: true },
-    email: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     pic: {
-        type: String,
-        default: "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg",
+      type: String,
+      default:
+        "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg",
     },
-},
-    { timestamps: true });
-
-export const user = mongoose.model("User", userModel);
+  },
+  { timestamps: true }
+);
+userModel.methods.matchPassword = async function (enteredPassword) {
+  return await bcrypt.compare(enteredPassword, this.password);
+};
+userModel.pre("save", async function (next) {
+  if (!this.isModified()) {
+    next();
+  }
+  const salt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, salt);
+});
+export const User = mongoose.model("User", userModel);

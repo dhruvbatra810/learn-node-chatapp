@@ -1,12 +1,10 @@
 import express from "express";
-import { uservalidator } from "../controller/usersValidator";
-import { registerUser } from "../controller/userController";
+import { uservalidator } from "../middlewares/usersValidator";
+import { registerUser, login } from "../controller/userController";
 import { handlemiddleware } from "../middlewares/errormiddleware";
-
 const router = express.Router();
-router.use(uservalidator);
 
-router.post("/login", registerUser);
-router.post("/", () => {});
-router.use(handlemiddleware)
+router.post("/register", uservalidator, registerUser);
+router.post("/login", login);
+router.use(handlemiddleware);
 export default router;

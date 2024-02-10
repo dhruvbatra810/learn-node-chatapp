@@ -8,7 +8,7 @@ import { chats } from "./dummydata/data";
 import path from "path";
 import { connectDB } from "../configs/db";
 import userRoutes from "./routes/userRoutes";
-import { uservalidator } from "./controller/usersValidator";
+import { uservalidator } from "./middlewares/usersValidator";
 import { handlemiddleware } from "./middlewares/errormiddleware";
 import { registerUser } from "./controller/userController";
 
@@ -19,14 +19,12 @@ const envFilePath = path.resolve(
   `.env.${process.env.NODE_ENV}`
 );
 const fallbackEnvFilePath = path.resolve(__dirname, "..", "configs", ".env");
-
-console.log(envFilePath, fallbackEnvFilePath);
 require("dotenv").config({ path: envFilePath || fallbackEnvFilePath });
 
 connectDB();
 
 const app = express();
-
+app.use(express.json());
 app.use(cors({ credentials: true }));
 app.use(compression());
 app.use(cookieParser());
