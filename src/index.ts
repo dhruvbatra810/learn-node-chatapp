@@ -34,7 +34,11 @@ app.get("/", (req, res) => {
 });
 
 app.use("/users", userRoutes);
-// app.use(handlemiddleware);
+app.use((req, res, next) => {
+  const error = new Error(`route not found ${req.originalUrl}`);
+  next(error);
+});
+app.use(handlemiddleware);
 const server = http.createServer(app);
 server.listen(process.env.HTTP_PORT || 5000, () => {
   console.log(`server running on port ${process.env.HTTP_PORT || 5000}`);
