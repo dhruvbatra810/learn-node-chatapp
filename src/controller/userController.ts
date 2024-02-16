@@ -16,28 +16,39 @@ export const registerUser = async (req, res, next) => {
         name: user.name,
         email: user.email,
         pic: user.pic,
-        token: generateToken(user._id),
+        token: generateToken(user._id, email),
       });
-    }
-    else
-    throw new Error("failed to create user");
+    } else throw new Error("failed to create user");
   } catch (error) {
     next(error);
   }
 };
-export const login =async (req, res, next) => {
+export const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
     const user: any = await User.findOne({ email });
-    if (user && await user.matchPassword(password)) {
+    if (user && (await user.matchPassword(password))) {
       res.status(201).json({
         _id: user._id,
         name: user.name,
         email: user.email,
-        pic: user.pic
+        pic: user.pic,
+        token: generateToken(user._id, email),
       });
     }
   } catch (error) {
     next(error);
   }
+};
+export const getAllUsers = async (req, res, next) => {
+  const keywword = req.query.search
+    ? {
+        $or: [
+          { name: { $regex: req.query.search, $options: "i" } },
+          { email: { $regex: req.query.search, $options: "i" } },
+        ],
+      }
+    : {};
+  const users = await User.find(keywword).find({ _id: { $ne: req.user._id } });
+  res.send(users);
 };
