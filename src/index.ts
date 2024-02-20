@@ -9,6 +9,7 @@ import path from "path";
 import { connectDB } from "../configs/db";
 import userRoutes from "./routes/userRoutes";
 import chatsRouter from "./routes/chatRoutes";
+import messageRoutes from "./routes/messageRoutes";
 import { uservalidator } from "./middlewares/usersValidator";
 import { handlemiddleware } from "./middlewares/errormiddleware";
 import { registerUser } from "./controller/userController";
@@ -36,6 +37,7 @@ app.get("/", (req, res) => {
 
 app.use("/users", userRoutes);
 app.use("/chats", chatsRouter);
+app.use("/messages", messageRoutes);
 app.use((req, res, next) => {
   const error = new Error(`route not found ${req.originalUrl}`);
   next(error);
