@@ -1,13 +1,14 @@
 import { Chats } from "../models/chatsModel";
 import { Message } from "../models/messageModels";
 import { User } from "../models/userModel";
+
 export const sendMessage = async (req, res, next) => {
   try {
     const { content, chatId } = req.body;
     if (!content || !chatId) {
       throw "Invalid data passed to the request ";
     }
-    let newMessage = {
+    const newMessage = {
       sender: req.user._id,
       content,
       chat: chatId,

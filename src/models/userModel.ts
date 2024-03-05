@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
+
 const userModel = new mongoose.Schema(
   {
     name: { type: String, required: true },
@@ -11,7 +12,7 @@ const userModel = new mongoose.Schema(
         "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg",
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 userModel.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);

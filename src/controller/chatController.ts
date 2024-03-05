@@ -1,15 +1,15 @@
 import { Chats } from "../models/chatsModel";
 import { User } from "../models/userModel";
+
 export const accessChat = async (req, res, next) => {
   try {
     const { userId } = req.body;
 
     if (!userId) {
-      console.log("UserId param not sent with request");
       return res.sendStatus(400);
     }
 
-    var isChat: any = await Chats.find({
+    let isChat: any = await Chats.find({
       isGroupChat: false,
       $and: [
         { users: { $elemMatch: { $eq: req.user._id } } },
@@ -27,7 +27,7 @@ export const accessChat = async (req, res, next) => {
     if (isChat.length > 0) {
       res.send(isChat[0]);
     } else {
-      var chatData = {
+      const chatData = {
         chatName: "sender",
         isGroupChat: false,
         users: [req.user._id, userId],
@@ -36,7 +36,7 @@ export const accessChat = async (req, res, next) => {
       const createdChat = await Chats.create(chatData);
       const FullChat = await Chats.findOne({ _id: createdChat._id }).populate(
         "users",
-        "-password"
+        "-password",
       );
       res.status(200).json(FullChat);
     }
@@ -69,8 +69,7 @@ export const createGroupChat = async (req, res, next) => {
       return res.status(400).send({ message: "Please Fill all the feilds" });
     }
 
-    var users = JSON.parse(req.body.users);
-    console.log("users", users);
+    const users = JSON.parse(req.body.users);
     if (users.length < 2) {
       return res
         .status(400)
@@ -80,7 +79,7 @@ export const createGroupChat = async (req, res, next) => {
 
     const groupChat = await Chats.create({
       chatName: req.body.name,
-      users: users,
+      users,
       isGroupChat: true,
       groupAdmin: req.user._id,
     });
@@ -103,11 +102,11 @@ export const renameGroup = async (req, res, next) => {
     const updatedChat = await Chats.findByIdAndUpdate(
       chatId,
       {
-        chatName: chatName,
+        chatName,
       },
       {
         new: true,
-      }
+      },
     )
       .populate("users", "-password")
       .populate("groupAdmin", "-password");
@@ -136,7 +135,7 @@ export const addToGroup = async (req, res, next) => {
       },
       {
         new: true,
-      }
+      },
     )
       .populate("users", "-password")
       .populate("groupAdmin", "-password");
@@ -165,7 +164,7 @@ export const removeFromGroup = async (req, res, next) => {
       },
       {
         new: true,
-      }
+      },
     )
       .populate("users", "-password")
       .populate("groupAdmin", "-password");

@@ -1,0 +1,21 @@
+{
+  "extends": [
+    "airbnb",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:prettier/recommended",
+    "prettier"
+  ],
+  "plugins": ["@typescript-eslint", "prettier"],
+  "rules": {
+    "no-console": "error",
+    "prettier/prettier": "error",
+    "consistent-return": 0,
+    "import/extensions": "off",
+    "import/no-unresolved": "off",
+    "@typescript-eslint/no-explicit-any": "off",
+    "no-underscore-dangle": "off",
+    "no-throw-literal": "off",
+    "import/prefer-default-export": "off",
+    "no-return-await": "off"
+  }
+}

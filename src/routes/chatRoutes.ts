@@ -1,6 +1,14 @@
 import express from "express";
 import { authenticate } from "../middlewares/authmiddleware";
-import { accessChat, addToGroup, createGroupChat, fetchChats, removeFromGroup, renameGroup } from "../controller/chatController";
+import {
+  accessChat,
+  addToGroup,
+  createGroupChat,
+  fetchChats,
+  removeFromGroup,
+  renameGroup,
+} from "../controller/chatController";
+
 const router = express.Router();
 
 router.use(authenticate);

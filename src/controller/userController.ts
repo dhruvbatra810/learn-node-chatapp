@@ -1,10 +1,10 @@
 import { User } from "../models/userModel";
 import { generateToken } from "../middlewares/middleware";
+
 export const registerUser = async (req, res, next) => {
   try {
     const { name, email, password, pic } = req.body;
     const userExsist = await User.find({ email });
-    console.log(userExsist);
     if (userExsist.length) {
       res.status(400);
       throw new Error("user already exsists");
@@ -40,7 +40,7 @@ export const login = async (req, res, next) => {
     next(error);
   }
 };
-export const getAllUsers = async (req, res, next) => {
+export const getAllUsers = async (req, res) => {
   const keywword = req.query.search
     ? {
         $or: [
